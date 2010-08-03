@@ -3,7 +3,6 @@
 # This file is part of gunicorn released under the MIT license. 
 # See the NOTICE for more information.
 
-from __future__ import with_statement
 
 import os
 
@@ -83,11 +82,12 @@ class GeventWorker(AsyncWorker):
           
     def cleanup(self, gt):
         try:
-            gt.join()
-        except greenlet.GreenletExit:
-            pass
-        except Exception:
-            self.log.exception("Unhandled exception in worker.")
+            try:
+                gt.join()
+            except greenlet.GreenletExit:
+                pass
+            except Exception:
+                self.log.exception("Unhandled exception in worker.")
         finally:
             gt._conn.close()
 

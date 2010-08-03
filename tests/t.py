@@ -4,8 +4,6 @@
 # This file is part of gunicorn released under the MIT license. 
 # See the NOTICE for more information.
 
-from __future__ import with_statement
-
 import array
 import os
 from StringIO import StringIO
@@ -18,11 +16,14 @@ from gunicorn.config import Config
 
 def data_source(fname):
     buf = StringIO()
-    with open(fname) as handle:
+    handle = open(fname)
+    try:
         for line in handle:
             line = line.rstrip("\n").replace("\\r\\n", "\r\n")
             buf.write(line)
         return buf
+    finally:
+        handle.close()
 
 class request(object):
     def __init__(self, name):

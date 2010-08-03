@@ -3,8 +3,6 @@
 # This file is part of gunicorn released under the MIT license. 
 # See the NOTICE for more information.
 
-from __future__ import with_statement
-
 import eventlet
 import eventlet.debug
 
@@ -48,13 +46,17 @@ class EventletWorker(AsyncWorker):
                     self.log.info("Parent changed, shutting down: %s" % self)
                     greenthread.kill(acceptor, eventlet.StopServe)
                     break
-            
+
                 eventlet.sleep(0.1)            
 
-            with eventlet.Timeout(self.timeout, False):
-                if pool.waiting():
+            timeout = eventlet.Timeout(self.timeout, False)
+            try:
+                try:
                     pool.waitall()
-                
+                except eventlet.Timeout:
+                    pass
+            finally:
+                timeout.cancel()                
         except KeyboardInterrupt:
             pass
         
