@@ -16,16 +16,6 @@ from zope.interface import implements
 
 from gunicorn.workers.base import Worker
 
-import os
-
-def wsgi_resource():
-    pool = threadpool.ThreadPool()
-    pool.start()
-    # Allow Ctrl-C to get you out cleanly:
-    reactor.addSystemEventTrigger('after', 'shutdown', pool.stop)
-    wsgi_resource = wsgi.WSGIResource(reactor, pool, WSGIHandler())
-    return wsgi_resource
-
 class Port(base.BasePort):
     addressFamily = socket.AF_INET
     socketType = socket.SOCK_STREAM
