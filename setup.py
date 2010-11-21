@@ -58,7 +58,7 @@ setup(
     gevent_wsgi=gunicorn.workers.ggevent:GeventWSGIWorker
     gevent_pywsgi=gunicorn.workers.ggevent:GeventPyWSGIWorker
     tornado=gunicorn.workers.gtornado:TornadoWorker
-
+    twisted=gunicorn.workers.gtwisted:TwistedWorker
     [paste.server_runner]
     main=gunicorn.app.pasterapp:paste_server
     """,
