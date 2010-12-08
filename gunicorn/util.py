@@ -73,8 +73,8 @@ def load_worker_class(uri):
                     uri = uri[1:]
                 return pkg_resources.load_entry_point("gunicorn", 
                             "gunicorn.workers", uri)
-            except ImportError: 
-                raise RuntimeError("arbiter uri invalid or not found")
+            except ImportError, e:
+                raise RuntimeError("arbiter uri invalid or not found; %s" % e)
         klass = components.pop(-1)
         mod = __import__('.'.join(components))
         for comp in components[1:]:
